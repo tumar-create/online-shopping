@@ -4,7 +4,7 @@ public class Order {
 
     private int id;
     private Customer customer;
-    private Item item;
+    private Item[] items;
     private double totalAmount;
     private double discount;
     private double shippingCost;
@@ -12,13 +12,51 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, Customer customer, Item item, double totalAmount, double discount, double shippingCost) {
+    public Order(int id, Customer customer, Item[] items,
+                 double totalAmount, double discount, double shippingCost) {
         this.id = id;
         this.customer = customer;
-        this.item = item;
+        this.items = items;
         this.totalAmount = totalAmount;
         this.discount = discount;
         this.shippingCost = shippingCost;
+    }
+
+    public double calculateItemsTotal() {
+        double sum = 0;
+        if (items != null) {
+            for (Item i : items) {
+                sum += i.getPrice();
+            }
+        }
+        return sum;
+    }
+
+    public double calculateFinalTotal() {
+        double itemsTotal = calculateItemsTotal();
+        double discountAmount = itemsTotal * (discount / 100.0);
+        return itemsTotal - discountAmount + shippingCost;
+    }
+
+    public void printOrderDetails() {
+        System.out.println("==============");
+        System.out.println("Order ID: " + id);
+        System.out.println("Customer information:");
+        customer.printDetails();
+        System.out.println("Items total: " + calculateItemsTotal());
+        System.out.println("Discount: " + discount + "%");
+        System.out.println("Shipping cost: " + shippingCost);
+        System.out.println("Final total: " + calculateFinalTotal());
+        System.out.println("==============");
+    }
+
+    public void showAllItems() {
+        System.out.println("Items in order " + id + ":");
+        if (items != null) {
+            for (Item i : items) {
+                System.out.println(i.toString());
+            }
+        }
     }
 
     public int getId() {
@@ -37,12 +75,12 @@ public class Order {
         this.customer = customer;
     }
 
-    public Item getItem() {
-        return item;
+    public Item[] getItems() {
+        return items;
     }
 
-    public void setItem(Item item) {
-        this.item = item;
+    public void setItems(Item[] items) {
+        this.items = items;
     }
 
     public double getTotalAmount() {
@@ -69,12 +107,12 @@ public class Order {
         this.shippingCost = shippingCost;
     }
 
-
+    @Override
     public String toString() {
         return "Order{" +
                 "id=" + id +
                 ", customer=" + customer +
-                ", item=" + item +
+                ", items=" + (items == null ? null : items.length + " items") +
                 ", totalAmount=" + totalAmount +
                 ", discount=" + discount +
                 ", shippingCost=" + shippingCost +

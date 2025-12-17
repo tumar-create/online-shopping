@@ -19,14 +19,17 @@ public class Customer {
         this.phoneNumber = phoneNumber;
     }
 
-    public String toString() {
-        return "Customer{" +
-                "id=" + id +
-                ", fullName='" + fullName + '\'' +
-                ", email='" + email + '\'' +
-                ", address='" + address + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+    public void printDetails() {
+        System.out.println("Customer ID: " + id + " name: " + fullName + " email: " + email);
+        System.out.println("Address: " + address + " phone: " + phoneNumber);
+    }
+
+    public boolean hasSameEmail(Customer other) {
+        return this.email != null && this.email.equals(other.email);
+    }
+
+    public boolean livesInSameCity(Customer other) {
+        return this.address.equals(other.address);
     }
 
     public int getId() {
@@ -67,5 +70,15 @@ public class Customer {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public String toString() {
+        return "Customer{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }

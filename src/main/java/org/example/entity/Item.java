@@ -21,6 +21,20 @@ public class Item {
         this.inStock = inStock;
     }
 
+    public void printDetails() {
+        System.out.println("ID: " + id + " name: " + name + " description: " + description
+                + " size: " + size + " price: " + price + " inStock?: " + inStock);
+    }
+
+    public boolean hasSameName(Item other) {
+        return this.name != null && this.name.equals(other.name);
+    }
+
+    public boolean isCheaperThan(Item other) {
+        return this.price < other.price;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -67,5 +81,17 @@ public class Item {
 
     public void setInStock(boolean inStock) {
         this.inStock = inStock;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", description='" + description + '\'' +
+                ", size='" + size + '\'' +
+                ", inStock=" + inStock +
+                '}';
     }
 }
