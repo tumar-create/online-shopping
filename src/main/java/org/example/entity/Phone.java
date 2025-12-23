@@ -3,15 +3,15 @@ package org.example.entity;
 import java.util.Objects;
 
 public class Phone extends Item {
-    private String marka;
+    private String brand;
     private String model;
     private String color;
     private int memory;
 
 
-    public Phone(int id, String name, double price, String description, boolean inStock, String marka, String model, String color, int memory) {
+    public Phone(int id, String name, double price, String description, boolean inStock, String brand, String model, String color, int memory) {
         super(id, name, price, description, inStock);
-        this.marka = marka;
+        this.brand = brand;
         this.model = model;
         this.color = color;
         this.memory = memory;
@@ -19,11 +19,11 @@ public class Phone extends Item {
 
 
     public String getMarka() {
-        return marka;
+        return brand;
     }
 
-    public void setMarka(String marka) {
-        this.marka = marka;
+    public void setMarka(String brand) {
+        this.brand = brand;
     }
 
     public String getModel() {
@@ -52,25 +52,24 @@ public class Phone extends Item {
 
     @Override
     public void showInfo() {
-        System.out.println("It's Phone ");
+        System.out.println("It's Phone:");
+        System.out.println(this.toString());
     }
 
     @Override
     public String toString() {
-        return super.toString() + " | marka: " + marka + " | model: " + model + " | color: " + color + " | memory: " + memory;
+        return super.toString() + " | brand: " + brand + " | model: " + model + " | color: " + color + " | memory: " + memory;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Phone phone = (Phone) o;
-        return memory == phone.memory && Objects.equals(marka, phone.marka) && Objects.equals(model, phone.model) && Objects.equals(color, phone.color);
+        return memory == phone.memory && Objects.equals(brand, phone.brand) && Objects.equals(model, phone.model) && Objects.equals(color, phone.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(marka, model, color, memory);
+        return Objects.hash(brand, model, color, memory);
     }
 }
-
-

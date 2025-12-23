@@ -49,6 +49,12 @@ public class Cloth extends Item {
     }
 
     @Override
+    public void showInfo() {
+        System.out.println("It's Cloth:");
+        System.out.println(this.toString());
+    }
+
+    @Override
     public String toString() {
         return super.toString() + " | size: " + size + " | season " + season + " | type " + type + " | material " + material;
     }
