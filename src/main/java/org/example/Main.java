@@ -31,8 +31,8 @@ public class Main {
         item3.setSize("700x200");
         item3.setInStock(true);
 
-        Item item4 = new Item(4, "MacBook Air 15",
-                700500, "Laptop", "15", true);
+        Item item4 = new Item(4, "Iphone 15",
+                700500, "phone", "15", true);
 
         Item[] items = new Item[]{item1, item2, item3};
         Item[] items2 = new Item[]{item1, item2};
@@ -64,13 +64,13 @@ public class Main {
         order2.printOrderDetails();
         order2.showAllItems();
 
-        System.out.println("=== ITEMS ===");
+        System.out.println("=== PHONE ===");
         item1.printDetails();
         item2.printDetails();
         item3.printDetails();
         item4.printDetails();
 
-        System.out.println("Is MacBook in stock?: " + item4.isInStock());
+        System.out.println("Is iphone in stock?: " + item4.isInStock());
 
         System.out.println("Item1 and Item2 have same name: " + item1.hasSameName(item2));
         System.out.println("Item3 and Item4 have same name: " + item3.hasSameName(item4));
