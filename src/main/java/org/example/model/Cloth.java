@@ -1,19 +1,30 @@
-package org.example.entity;
+package org.example.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
+
+@Entity
+@Table(name = "cloths")
 public class Cloth extends Item {
+
     private int size;
     private String season;
     private String type;
     private String material;
 
-    public Cloth(int id, String name, double price, String description, boolean inStock, int size, String season, String type, String material) {
-        super(id, name, price, description, inStock);
+    public Cloth(String name, double price, String description, boolean inStock, int size, String season, String type, String material) {
+        super(name, price, description, inStock);
         this.size = size;
         this.season = season;
         this.type = type;
         this.material = material;
+    }
+
+    public Cloth() {
+
     }
 
     public int getSize() {

@@ -1,20 +1,30 @@
-package org.example.entity;
+package org.example.model;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.util.Objects;
 
+@Entity
+@Table(name = "phones")
 public class Phone extends Item {
+
     private String brand;
     private String model;
     private String color;
     private int memory;
 
 
-    public Phone(int id, String name, double price, String description, boolean inStock, String brand, String model, String color, int memory) {
-        super(id, name, price, description, inStock);
+    public Phone(String name, double price, String description, boolean inStock, String brand, String model, String color, int memory) {
+        super(name, price, description, inStock);
         this.brand = brand;
         this.model = model;
         this.color = color;
         this.memory = memory;
+    }
+
+    public Phone() {
+
     }
 
 

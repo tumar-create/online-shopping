@@ -1,8 +1,16 @@
-package org.example.entity;
+package org.example.model;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "customers")
 public class Customer {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     private String fullName;
     private String email;
     private String address;
@@ -11,8 +19,7 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int id, String fullName, String email, String address, String phoneNumber) {
-        this.id = id;
+    public Customer(String fullName, String email, String address, String phoneNumber) {
         this.fullName = fullName;
         this.email = email;
         this.address = address;

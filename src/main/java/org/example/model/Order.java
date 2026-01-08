@@ -1,13 +1,31 @@
-package org.example.entity;
+package org.example.model;
 
-import java.util.ArrayList;
+import jakarta.persistence.*;
+
 import java.util.List;
 
+
+@Entity
+@Table(name = "orders")
 public class Order {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
     private Customer customer;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "order_items",
+            joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "item_id")
+    )
     private List<Item> items;
+
+
     private double totalAmount;
     private double discount;
     private double shippingCost;
@@ -15,9 +33,8 @@ public class Order {
     public Order() {
     }
 
-    public Order(int id, Customer customer, List<Item> items,
+    public Order(Customer customer, List<Item> items,
                  double totalAmount, double discount, double shippingCost) {
-        this.id = id;
         this.customer = customer;
         this.items = items;
         this.totalAmount = totalAmount;
