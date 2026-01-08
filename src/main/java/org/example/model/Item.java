@@ -1,8 +1,16 @@
-package org.example.entity;
+package org.example.model;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class Item {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+
     private String name;
     private double price;
     private String description;
@@ -12,8 +20,7 @@ public abstract class Item {
     public Item() {
     }
 
-    public Item(int id, String name, double price, String description, boolean inStock) {
-        this.id = id;
+    public Item(String name, double price, String description, boolean inStock) {
         this.name = name;
         this.price = price;
         this.description = description;
