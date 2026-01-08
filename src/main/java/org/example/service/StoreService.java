@@ -18,7 +18,6 @@ public class StoreService {
 
     public void addItem(Item item) {
         repository.saveItem(item);
-        System.out.println("LOG: Товар сохранен в БД -> " + item.getName());
     }
 
     public void saveCustomer(Customer customer) {
