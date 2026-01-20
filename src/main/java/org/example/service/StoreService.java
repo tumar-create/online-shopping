@@ -1,112 +1,98 @@
 package org.example.service;
 
-import org.example.model.Customer;
-import org.example.model.Item;
-import org.example.model.Order;
+import org.example.dto.ItemDto;
+import org.example.dto.OrderDto;
+import org.example.entity.*;
+import org.example.repository.CustomerRepository;
 import org.example.repository.StoreRepository;
+import org.example.utils.ClothMapper;
+import org.example.utils.CustomerMapper;
+import org.example.utils.OrderMapper;
+import org.example.utils.PhoneMapper;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class StoreService {
 
-    private final StoreRepository repository;
+    private final StoreRepository storeRepository;
+    private final CustomerRepository customerRepository;
+    private final CustomerMapper customerMapper;
 
-    public StoreService() {
-        this.repository = new StoreRepository();
+    private final PhoneMapper phoneMapper;
+    private final ClothMapper clothMapper;
+    private final OrderMapper orderMapper;
+
+    public StoreService(StoreRepository storeRepository,
+                        CustomerRepository customerRepository,
+                        CustomerMapper customerMapper,
+                        PhoneMapper phoneMapper,
+                        ClothMapper clothMapper, OrderMapper orderMapper) {
+        this.storeRepository = storeRepository;
+        this.customerRepository = customerRepository;
+        this.customerMapper = customerMapper;
+        this.phoneMapper = phoneMapper;
+        this.clothMapper = clothMapper;
+        this.orderMapper = orderMapper;
     }
 
-    public void addItem(Item item) {
-        repository.saveItem(item);
-    }
-
-    public void saveCustomer(Customer customer) {
-        repository.saveCustomer(customer);
-    }
-
-    public List<Item> getAllItems() {
-        return repository.getAllItems();
-    }
-
-    public void createOrder(Customer customer, List<Integer> itemIds) {
-        if (customer.getId() == 0) {
-            repository.saveCustomer(customer);
+    public OrderDto createOrder(Integer customerId, List<Integer> itemIds, double discount, double shipping) {
+        CustomerEntity customerEntity = customerRepository.findCustomerById(customerId);
+        if (customerEntity == null) {
+            throw new RuntimeException("Customer not found");
         }
 
-        List<Item> itemsForOrder = new ArrayList<>();
-
+        List<ItemEntity> itemEntities = new ArrayList<>();
         for (Integer id : itemIds) {
-            Item item = repository.findItemById(id);
-            if (item != null && item.isInStock()) {
-                itemsForOrder.add(item);
-            } else {
-                System.out.println("WARNING: Item ID " + id + " not found or not in stock!");
+            ItemEntity item = storeRepository.findItemById(id);
+            if (item != null) itemEntities.add(item);
+        }
+
+
+        OrderEntity orderEntity = new OrderEntity();
+        orderEntity.setCustomer(customerEntity);
+        orderEntity.setItems(itemEntities);
+        orderEntity.setDiscount(discount);
+        orderEntity.setShippingCost(shipping);
+
+
+        double itemsTotal = itemEntities.stream().mapToDouble(ItemEntity::getPrice).sum();
+        double finalTotal = itemsTotal - (itemsTotal * discount / 100) + shipping;
+        orderEntity.setTotalAmount(finalTotal);
+
+        storeRepository.saveOrder(orderEntity);
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setId(orderEntity.getId());
+        orderDto.setCustomerDto(customerMapper.toDto(customerEntity));
+        orderDto.setTotalAmount(orderEntity.getTotalAmount());
+        orderDto.setDiscount(discount);
+        orderDto.setShippingCost(shipping);
+
+        List<ItemDto> itemDtos = new ArrayList<>();
+        for (ItemEntity entity : itemEntities) {
+            if (entity instanceof PhoneEntity) {
+                itemDtos.add(phoneMapper.toDto((PhoneEntity) entity));
+            } else if (entity instanceof ClothEntity) {
+                itemDtos.add(clothMapper.toDto((ClothEntity) entity));
             }
         }
+        orderDto.setItems(itemDtos);
 
-        if (itemsForOrder.isEmpty()) {
-            System.out.println("Shopping cart is empty!!");
-            return;
-        }
+        return orderDto;
+    }
 
-        Order newOrder = new Order(customer, itemsForOrder, 0.0, 5.0, 15.0);
+    public List<OrderDto> findAllOrders(){
+        return storeRepository.findAllOrders().stream()
+                .map(orderMapper::toDto)
+                .toList();
+    }
 
-        double finalPrice = calculateFinalTotal(newOrder);
-        newOrder.setTotalAmount(finalPrice);
-
-        repository.saveOrder(newOrder);
-
-        System.out.println("Order saved in db.");
-        printOrderDetails(newOrder);
+    public OrderDto findOrderById(Integer id) {
+        return orderMapper.toDto(storeRepository.findOrderById(id));
     }
 
 
-    public double calculateItemsTotal(Order order) {
-        double sum = 0;
-        if (order.getItems() != null) {
-            for (Item i : order.getItems()) {
-                sum += i.getPrice();
-            }
-        }
-        return sum;
-    }
-
-    public double calculateFinalTotal(Order order) {
-        double itemsTotal = calculateItemsTotal(order);
-        double discountAmount = itemsTotal * (order.getDiscount() / 100.0);
-        return itemsTotal - discountAmount + order.getShippingCost();
-    }
-
-    public void printOrderDetails(Order order) {
-        System.out.println("\n============== ORDER RECEIPT#" + order.getId() + " ==============");
-        System.out.println("Customer: " + order.getCustomer().getFullName());
-        System.out.println("--- Item List ---");
-        for (Item i : order.getItems()) {
-            System.out.println(i.toString());;
-        }
-        System.out.println("----------------------");
-        System.out.println("Items price: " + calculateItemsTotal(order));
-        System.out.println("Discount: " + order.getDiscount());
-        System.out.println("Shipping cost: " +  order.getShippingCost());
-        System.out.println("Final total price: " + calculateFinalTotal(order));
-        System.out.println("============================================\n");
-    }
-
-    public void showInventory() {
-        List<Item> items = repository.getAllItems();
-        for (Item item : items) {
-            item.showInfo();
-        }
-    }
-
-    public List<Item> searchByName(String name) {
-        List<Item> all = repository.getAllItems();
-        List<Item> result = new ArrayList<>();
-        for (Item item : all) {
-            if (item.getName().toLowerCase().contains(name.toLowerCase())) {
-                result.add(item);
-            }
-        }
-        return result;
-    }
 }

@@ -12,10 +12,10 @@
         <property name="show_sql">true</property>
         <property name="hbm2ddl.auto">create</property>
 
-        <mapping class="org.example.model.Item"/>
-        <mapping class="org.example.model.Phone"/>
-        <mapping class="org.example.model.Cloth"/>
-        <mapping class="org.example.model.Customer"/>
-        <mapping class="org.example.model.Order"/>
+        <mapping class="org.example.entity.ItemEntity"/>
+        <mapping class="org.example.entity.PhoneEntity"/>
+        <mapping class="org.example.entity.ClothEntity"/>
+        <mapping class="org.example.entity.CustomerEntity"/>
+        <mapping class="org.example.entity.OrderEntity"/>
     </session-factory>
 </hibernate-configuration>

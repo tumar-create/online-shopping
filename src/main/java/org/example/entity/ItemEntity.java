@@ -1,15 +1,16 @@
-package org.example.model;
+package org.example.entity;
 
 
 import jakarta.persistence.*;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class Item {
+public abstract class ItemEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_seq")
+    @SequenceGenerator(name = "item_seq", sequenceName = "item_global_sequence", allocationSize = 1)
+    private Integer id;
 
     private String name;
     private double price;
@@ -17,10 +18,10 @@ public abstract class Item {
     private boolean inStock;
 
 
-    public Item() {
+    public ItemEntity() {
     }
 
-    public Item(String name, double price, String description, boolean inStock) {
+    public ItemEntity(String name, double price, String description, boolean inStock) {
         this.name = name;
         this.price = price;
         this.description = description;
@@ -29,22 +30,11 @@ public abstract class Item {
 
     public abstract void showInfo();
 
-
-
-    public boolean hasSameName(Item other) {
-        return this.name != null && this.name.equals(other.name);
-    }
-
-    public boolean isCheaperThan(Item other) {
-        return this.price < other.price;
-    }
-
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

@@ -1,7 +1,8 @@
 package org.example.repository;
 
-import org.example.entity.ItemEntity;
-import org.example.entity.OrderEntity;
+
+import org.example.entity.ClothEntity;
+import org.example.entity.PhoneEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -11,44 +12,48 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-
 @Repository
-public class StoreRepository {
+public class ClothRepository {
 
     private static final SessionFactory sessionFactory;
 
     static {
         try {
             sessionFactory = new Configuration().configure().buildSessionFactory();
-        } catch (Exception e) {
-            throw new RuntimeException("Ошибка SessionFactory: " + e.getMessage());
+        } catch (HibernateException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    public void saveOrder(OrderEntity order) {
+    public void saveCloth(ClothEntity clothEntity) {
         try (Session session = sessionFactory.openSession()) {
             Transaction tx = session.beginTransaction();
-            session.persist(order);
+            session.persist(clothEntity);
             tx.commit();
         }
     }
 
-
-    public ItemEntity findItemById(Integer id) {
+    public ClothEntity findClothById(Integer id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(ItemEntity.class, id);
+            return session.get(ClothEntity.class, id);
         }
     }
 
-    public List<OrderEntity> findAllOrders() {
+    public List<ClothEntity> findAllClothes(){
         try (Session session = sessionFactory.openSession()) {
-            return session.createQuery("FROM OrderEntity", OrderEntity.class).list();
+            return session.createQuery("FROM ClothEntity ", ClothEntity.class).list();
         }
     }
 
-    public OrderEntity findOrderById(Integer id) {
+    public void deleteCloth(Integer id) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(OrderEntity.class, id);
+            Transaction tx = session.beginTransaction();
+            ClothEntity entity = session.get(ClothEntity.class, id);
+
+            if(entity != null) {
+                session.remove(entity);
+            }
+            tx.commit();
         }
     }
 }
