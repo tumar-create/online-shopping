@@ -1,49 +1,31 @@
-package org.example.model;
+package org.example.dto;
 
+import java.util.Objects;
 
-import jakarta.persistence.*;
+public class CustomerDto {
 
-@Entity
-@Table(name = "customers")
-public class Customer {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Integer id;
     private String fullName;
     private String email;
     private String address;
     private String phoneNumber;
 
-    public Customer() {
-    }
 
-    public Customer(String fullName, String email, String address, String phoneNumber) {
+    public CustomerDto(String fullName, String email, String address, String phoneNumber) {
         this.fullName = fullName;
         this.email = email;
         this.address = address;
         this.phoneNumber = phoneNumber;
     }
 
-    public void printDetails() {
-        System.out.println("Customer ID: " + id + " name: " + fullName + " email: " + email);
-        System.out.println("Address: " + address + " phone: " + phoneNumber);
+    public CustomerDto() {
     }
 
-    public boolean hasSameEmail(Customer other) {
-        return this.email != null && this.email.equals(other.email);
-    }
-
-    public boolean livesInSameCity(Customer other) {
-        return this.address.equals(other.address);
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -87,5 +69,17 @@ public class Customer {
                 ", address='" + address + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerDto that = (CustomerDto) o;
+        return id == that.id && Objects.equals(fullName, that.fullName) && Objects.equals(email, that.email) && Objects.equals(address, that.address) && Objects.equals(phoneNumber, that.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, fullName, email, address, phoneNumber);
     }
 }

@@ -1,21 +1,15 @@
-package org.example.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+package org.example.dto;
 
 import java.util.Objects;
 
-@Entity
-@Table(name = "phones")
-public class Phone extends Item {
+public class PhoneDto extends ItemDto{
 
     private String brand;
     private String model;
     private String color;
     private int memory;
 
-
-    public Phone(String name, double price, String description, boolean inStock, String brand, String model, String color, int memory) {
+    public PhoneDto(String name, double price, String description, boolean inStock, String brand, String model, String color, int memory) {
         super(name, price, description, inStock);
         this.brand = brand;
         this.model = model;
@@ -23,16 +17,13 @@ public class Phone extends Item {
         this.memory = memory;
     }
 
-    public Phone() {
+    public PhoneDto() {}
 
-    }
-
-
-    public String getMarka() {
+    public String getBrand() {
         return brand;
     }
 
-    public void setMarka(String brand) {
+    public void setBrand(String brand) {
         this.brand = brand;
     }
 
@@ -61,25 +52,25 @@ public class Phone extends Item {
     }
 
     @Override
-    public void showInfo() {
-        System.out.println("It's Phone:");
-        System.out.println(this.toString());
-    }
-
-    @Override
     public String toString() {
-        return super.toString() + " | brand: " + brand + " | model: " + model + " | color: " + color + " | memory: " + memory;
+        return "PhoneDto{" +
+                "brand='" + brand + '\'' +
+                ", model='" + model + '\'' +
+                ", color='" + color + '\'' +
+                ", memory=" + memory +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Phone phone = (Phone) o;
-        return memory == phone.memory && Objects.equals(brand, phone.brand) && Objects.equals(model, phone.model) && Objects.equals(color, phone.color);
+        if (!super.equals(o)) return false;
+        PhoneDto phoneDto = (PhoneDto) o;
+        return memory == phoneDto.memory && Objects.equals(brand, phoneDto.brand) && Objects.equals(model, phoneDto.model) && Objects.equals(color, phoneDto.color);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(brand, model, color, memory);
+        return Objects.hash(super.hashCode(), brand, model, color, memory);
     }
 }

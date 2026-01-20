@@ -1,21 +1,16 @@
-package org.example.model;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+package org.example.dto;
 
 import java.util.Objects;
 
-
-@Entity
-@Table(name = "cloths")
-public class Cloth extends Item {
+public class ClothDto extends ItemDto{
 
     private int size;
     private String season;
     private String type;
     private String material;
 
-    public Cloth(String name, double price, String description, boolean inStock, int size, String season, String type, String material) {
+
+    public ClothDto(String name, double price, String description, boolean inStock, int size, String season, String type, String material) {
         super(name, price, description, inStock);
         this.size = size;
         this.season = season;
@@ -23,9 +18,9 @@ public class Cloth extends Item {
         this.material = material;
     }
 
-    public Cloth() {
-
+    public ClothDto() {
     }
+
 
     public int getSize() {
         return size;
@@ -60,25 +55,21 @@ public class Cloth extends Item {
     }
 
     @Override
-    public void showInfo() {
-        System.out.println("It's Cloth:");
-        System.out.println(this.toString());
-    }
-
-    @Override
     public String toString() {
         return super.toString() + " | size: " + size + " | season " + season + " | type " + type + " | material " + material;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Cloth cloth = (Cloth) o;
-        return size == cloth.size && Objects.equals(season, cloth.season) && Objects.equals(type, cloth.type) && Objects.equals(material, cloth.material);
+        if (!super.equals(o)) return false;
+        ClothDto clothDto = (ClothDto) o;
+        return size == clothDto.size && Objects.equals(season, clothDto.season) && Objects.equals(type, clothDto.type) && Objects.equals(material, clothDto.material);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(size, season, type, material);
+        return Objects.hash(super.hashCode(), size, season, type, material);
     }
 }
